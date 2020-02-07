@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="author" content="Enrique Gomez" />
+    <style>
+      .firstHeading {
+        margin-top: 80px;
+        color: blue;
+        font-weight: 900;
+        font-size: 50px;
+      }
+
+      .secondHeading {
+        color: blue;
+        font-weight: 600;
+        font-size: 35px;
+      }
+
+      .firstParagraph {
+        color: blue;
+        font-size: 30px;
+        margin-bottom: 10px;
+        font-weight: 400;
+      }
+
+      img {
+        position: absolute;
+        height: 80px;
+      }
+
+      div {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+      }
+
+      #rightSide {
+        left: 500px;
+        border-left: 8px solid royalblue;
+      }
+
+      body {
+        background: #fbd800;
+      }
+
+      .leftBox {
+        background-color: orange;
+      }
+
+      #simpsonsLogo {
+        margin-bottom: 50px;
+        width: 300px;
+        height: 100px;
+      }
+    </style>
+
+    <title>Simpsons Matching Game</title>
+  </head>
+
+  <body onload="generateFaces()">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Logo_The_Simpsons.svg/800px-Logo_The_Simpsons.svg.png"
+      alt="A Photo of the Simpsons Logo"
+      id="simpsonsLogo"
+    />
+
+    <audio
+      id="homerAudio"
+      src="http://www.wavsource.com/snds_2018-06-03_5106726768923853/tv/simpsons/homer/doh2.wav"
+      preload="auto"
+    ></audio>
+    <br />
+
+    <header>
+      <h1 class="firstHeading" id="h1">A Simpsons Inspired Matching Game</h1>
+    </header>
+
+    <h2 class="secondHeading" id="h2">
+      Are you smarter than Homer?
+    </h2>
+
+    <p class="firstParagraph" id="p1">
+      Click the extra Homer on the left!
+    </p>
+
+    <div id="leftSide" class="leftBox"></div>
+    <div id="rightSide"></div>
+
+    <script>
+      var numberOfFaces = 5;
+      var theLeftSide = document.getElementById("leftSide");
+      var theRightSide = document.getElementById("rightSide");
+      var theBody = document.getElementsByTagName("body")[0];
+
+      function generateFaces() {
+        for (i = 0; i < numberOfFaces; i++) {
+          var face = document.createElement("img");
+          face.src = "http://pngimg.com/uploads/simpsons/simpsons_PNG86.png";
+          var randomTop = Math.floor(Math.random() * 400) + 1;
+          var randomLeft = Math.floor(Math.random() * 400) + 1;
+          face.style.top = randomTop + "px";
+          face.style.left = randomLeft + "px";
+          theLeftSide.appendChild(face);
+        }
+        var leftSideImages = theLeftSide.cloneNode(true);
+        leftSideImages.removeChild(leftSideImages.lastChild);
+        theRightSide.appendChild(leftSideImages);
+
+        theLeftSide.lastChild.onclick = function nextLevel(event) {
+          event.stopPropagation();
+          while (theLeftSide.firstChild) {
+            theLeftSide.removeChild(theLeftSide.firstChild);
+          }
+          while (theRightSide.firstChild) {
+            theRightSide.removeChild(theRightSide.firstChild);
+          }
+          numberOfFaces += 5;
+          generateFaces();
+
+          theBody.onclick = function gameOver() {
+            var idiot = document.getElementById("homerAudio").play();
+            alert("D'OHH!! \n\n WRONGE ONE!!");
+            theBody.onclick = null;
+            theLeftSide.lastChild.onclick = null;
+          };
+        };
+      }
+    </script>
+  </body>
+</html>
